@@ -14,15 +14,8 @@ if [ ! -d "$PLENV_PREFIX_PATH" ]; then
     exit 1
 fi
 
-PLATFORM=$(uname)
-if [ "$PLATFORM" == "Darwin" ]; then
-    set $(ls -lO $PLENV_PREFIX_PATH/.. | grep ${PLENV_VERSION})
-    if [ $(echo $5 | grep 'uchg') ]; then
-        sudo chflags -R nouchg $PLENV_PREFIX_PATH
-    else
-        echo "version '${PLENV_VERSION}' is already unlocked."
-    fi
+if [ $(ls -l "$PLENV_ROOT/versions" | grep "$PLENV_VERSION" | cut -c 3) == "w" ]; then
+    echo "version '${PLENV_VERSION}' is already unlocked."
 else
-    echo "your platform ($PLATFORM) is not supported."
-    exit 1;
+    find "$PLENV_PREFIX_PATH" -type d -exec chmod u+w {} +
 fi

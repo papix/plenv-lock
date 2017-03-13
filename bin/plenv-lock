@@ -8,21 +8,14 @@ if [ "$PLENV_VERSION" == "system" ]; then
     exit 1;
 fi
 
-PLENV_PREFIX_PATH="${PLENV_ROOT}/versions/${PLENV_VERSION}"
+PLENV_PREFIX_PATH="$PLENV_ROOT/versions/$PLENV_VERSION"
 if [ ! -d "$PLENV_PREFIX_PATH" ]; then
-    echo "version '${PLENV_VERSION}' not installed"
+    echo "version '$PLENV_VERSION' not installed"
     exit 1
 fi
 
-PLATFORM=$(uname)
-if [ "$PLATFORM" == "Darwin" ]; then
-    set $(ls -lO $PLENV_PREFIX_PATH/.. | grep ${PLENV_VERSION})
-    if [ $(echo $5 | grep 'uchg') ]; then
-        echo "version '${PLENV_VERSION}' is already locked."
-    else
-        sudo chflags -R uchg $PLENV_PREFIX_PATH
-    fi
+if [ $(ls -l "$PLENV_ROOT/versions" | grep "$PLENV_VERSION" | cut -c 3) == "w" ]; then
+    find "$PLENV_PREFIX_PATH" -type d -exec chmod u-w {} +
 else
-    echo "your platform ($PLATFORM) is not supported."
-    exit 1;
+    echo "version '${PLENV_VERSION}' is already locked."
 fi
