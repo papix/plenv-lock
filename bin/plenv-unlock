@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+[ -n "$1" ] && PLENV_VERSION="$1" || PLENV_VERSION=$(plenv version-name)
+
+if [ "$PLENV_VERSION" == "system" ]; then
+    echo "system perl cannot lock."
+    exit 1;
+fi
+
+PLENV_PREFIX_PATH="${PLENV_ROOT}/versions/${PLENV_VERSION}"
+if [ ! -d "$PLENV_PREFIX_PATH" ]; then
+    echo "version '${PLENV_VERSION}' not installed"
+    exit 1
+fi
+
+PLATFORM=$(uname)
+if [ "$PLATFORM" == "Darwin" ]; then
+    set $(ls -lO $PLENV_PREFIX_PATH/.. | grep ${PLENV_VERSION})
+    if [ $(echo $5 | grep 'uchg') ]; then
+        sudo chflags -R nouchg $PLENV_PREFIX_PATH
+    else
+        echo "version '${PLENV_VERSION}' is already unlocked."
+    fi
+else
+    echo "your platform ($PLATFORM) is not supported."
+    exit 1;
+fi
