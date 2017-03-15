@@ -3,8 +3,8 @@
 ## Installation
 
 ```
-mkdir -p $PLENV_ROOT/plugins
-git clone git@github.com:papix/plenv-lock.git $PLENV_ROOT/plugins/plenv-lock
+$ mkdir -p $PLENV_ROOT/plugins
+$ git clone git@github.com:papix/plenv-lock.git $PLENV_ROOT/plugins/plenv-lock
 ```
 
 ## Usage
