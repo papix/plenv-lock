@@ -16,6 +16,7 @@ fi
 
 if [ $(ls -l "$PLENV_ROOT/versions" | grep "$PLENV_VERSION" | cut -c 3) == "w" ]; then
     find "$PLENV_PREFIX_PATH" -type d -exec chmod u-w {} +
+    echo "version '${PLENV_VERSION}' is locked."
 else
     echo "version '${PLENV_VERSION}' is already locked."
 fi
